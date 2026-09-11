@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-09-11T17:44:29.455Z",
+  "library": "Bytes",
+  "version": "0.1.9",
+  "function": "BytesToTextBase16",
+  "sourceSha256": "9e950b5346ee33393b79130abcd8622b91f3c25408cf74e2ee461cd41b5dacfa",
+  "runtime": "v24.18.0",
+  "harnessSha256": {
+    "validator": "018191d14e627cd0fe43a8c8bda863d24ba22a8e3d59ea82febbd3713555340a",
+    "runner": "31c912089f4db3fdeda26d44540ec2c9023bafa481b62a00a35778b19b90a2e0"
+  },
+  "publishedSmokeTest": 0,
+  "smokeTestLimit": "The published test returns zero without output assertions; the independent comparisons provide the evidence.",
+  "oracle": "Node Buffer hex encoding, compared case-insensitively with exact character count and output type",
+  "referenceHandling": "Reference is computed from a separate input copy before the target is called",
+  "inputDomain": "Arrays of integer bytes from 0 to 255, with lengths up to 65,536",
+  "seed": "0x5e91b1a7",
+  "cases": 65976,
+  "groups": {
+    "empty and negative zero": 2,
+    "all single bytes": 256,
+    "all two-byte combinations": 65536,
+    "ascending and descending byte ranges": 2,
+    "seeded longer arrays": 160,
+    "repeated zero or maximum byte": 20
+  },
+  "failureCount": 0,
+  "failures": [],
+  "elapsedSeconds": 27.650235145,
+  "conclusion": "No incorrect result found in the tested cases",
+  "limits": "Not exhaustive over longer arrays, not a proof for all inputs, and not a test of other library functions"
+}

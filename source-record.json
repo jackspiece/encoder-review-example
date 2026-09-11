@@ -1,0 +1,12 @@
+{
+  "library": "Bytes",
+  "version": "0.1.9",
+  "function": "BytesToTextBase16",
+  "publisher": "Progsbase repository",
+  "reviewed_on": "2026-09-11",
+  "download_url": "https://repo.progsbase.com/repoviewer/no.inductive.libraries/Bytes/0.1.9/?view=bundle&accept=text/plain;subtype=text/javascript;subtypeversion=5",
+  "documentation_url": "https://repo.progsbase.com/repoviewer/no.inductive.libraries/Bytes/0.1.9///BytesToTextBase16/",
+  "sha256": "9e950b5346ee33393b79130abcd8622b91f3c25408cf74e2ee461cd41b5dacfa",
+  "bytes": 9827,
+  "third_party_source_included": false
+}
