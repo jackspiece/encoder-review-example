@@ -33,10 +33,10 @@ Longer inputs are sampled. This is a bounded result for one exact source file.
 ```sh
 git clone https://github.com/jackspiece/encoder-review-example.git
 cd encoder-review-example
-node --test test/validator.test.cjs
+node --test test/*.test.cjs
 ```
 
-Six tests exercise correct output, changed values, missing padding, wrong types, input mutation, exceptions and invalid inputs. Some tests contain more than one assertion.
+The six original tests are preserved. Additional tests reject 12 deliberately incorrect encoder controls, check 512 generated valid encodings, and verify worker time/output limits, source-pin rejection, report overwrite protection and parent-signal cleanup. CI runs only these local checker tests, without downloading the external bundle.
 
 **To run all 65,976 target cases**, follow the [reproduction steps](docs/reproduce.md) to download the pinned bundle and run `verify.cjs`.
 
