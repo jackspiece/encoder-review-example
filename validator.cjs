@@ -21,7 +21,7 @@ function checkEncoding(encode, bytes) {
       actual.join("").toUpperCase() === expected;
     return { valid, input, expected, actual };
   } catch (error) {
-    return { valid: false, input, expected, error: String(error.message || error) };
+    return { valid: false, input, expected, error: String(error?.message || error) };
   }
 }
 
