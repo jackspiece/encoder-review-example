@@ -52,7 +52,9 @@ function main() {
     limits: "Not exhaustive over longer arrays, not a proof for all inputs, and not a test of other library functions",
   };
   fs.writeFileSync(reportFile, JSON.stringify(result, null, 2) + "\n");
-  console.log(JSON.stringify({ ...result, report: path.basename(reportFile) }));
+  // verify.cjs publishes the staged file. Print only a short summary so a
+  // failing run stays far below the 1 MiB output limit in bounded-process.cjs.
+  console.log(JSON.stringify({ cases, failureCount, report: path.basename(reportFile) }));
   process.exitCode = failureCount ? 1 : 0;
 }
 

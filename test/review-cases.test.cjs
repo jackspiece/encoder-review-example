@@ -25,3 +25,47 @@ test("a correct encoder passes every declared case, with the recorded inputs and
   assert.deepEqual(Object.keys(result.groups), Object.keys(recorded.groups));
   assert.equal(inputs.digest("hex"), RECORDED_INPUTS_SHA256);
 });
+
+test("a defect that appears only in long inputs is reported compactly", () => {
+  const result = runCases(bytes => {
+    const out = correct(bytes);
+    if (bytes.length >= 4096) out[0] = out[0] === "0" ? "1" : "0";
+    return out;
+  });
+  assert.equal(result.failureCount, 36);
+  assert.equal(result.failures.length, 10);
+  const [first] = result.failures;
+  // Case 65,941 is the first seeded 4,096-byte array.
+  assert.equal(first.case, 65941);
+  assert.equal(first.group, "seeded longer arrays");
+  assert.equal(first.inputLength, 4096);
+  assert.equal(first.inputHead.length, 32);
+  assert.equal(first.expectedHead, Buffer.from(first.inputHead).toString("hex").toUpperCase());
+  assert.equal(first.actualHead.length, 64);
+  assert.notEqual(first.actualHead.join(""), first.expectedHead);
+  assert(Buffer.byteLength(JSON.stringify(result)) < 64 * 1024);
+});
+
+test("failures on the largest inputs stay small when the encoder throws long messages or returns strings", () => {
+  const longMessage = "x".repeat(1024 * 1024);
+  let largeCalls = 0;
+  const result = runCases(bytes => {
+    if (bytes.length < 65536) return correct(bytes);
+    largeCalls += 1;
+    if (largeCalls % 2) throw new Error(longMessage);
+    return correct(bytes).join("");
+  });
+  assert.equal(result.failureCount, 18);
+  assert.equal(result.failures.length, 10);
+  result.failures.forEach((failure, index) => {
+    assert.equal(failure.inputLength, 65536);
+    if (index % 2 === 0) {
+      assert.equal(failure.error, "x".repeat(200));
+      assert.equal(failure.actualHead, undefined);
+    } else {
+      assert.equal(failure.actualHead, failure.expectedHead);
+      assert.equal(failure.error, undefined);
+    }
+  });
+  assert(Buffer.byteLength(JSON.stringify(result)) < 64 * 1024);
+});

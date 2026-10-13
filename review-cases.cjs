@@ -4,6 +4,20 @@ const assert = require("node:assert/strict");
 const { checkEncoding } = require("./validator.cjs");
 
 const SEED = 0x5e91b1a7;
+const MAX_FAILURE_RECORDS = 10;
+// Failure records keep short previews. A full record for one failing
+// 65,536-byte case holds about 0.9 MB of input, expected and actual values.
+const INPUT_HEAD_BYTES = 32;
+const TEXT_HEAD_CHARS = 64;
+const ERROR_HEAD_CHARS = 200;
+
+// Shorten strings and arrays; other values are kept as returned. The host
+// Array.prototype.slice avoids calling a slice method on the returned value.
+function head(value, length) {
+  if (typeof value === "string") return value.slice(0, length);
+  if (Array.isArray(value)) return Array.prototype.slice.call(value, 0, length);
+  return value;
+}
 
 // Run every declared case through the independent checker and count the cases
 // by group. Generation is deterministic, so a case number always names the
@@ -19,7 +33,15 @@ function runCases(encode) {
     groups[group] = (groups[group] || 0) + 1;
     if (!result.valid) {
       failureCount += 1;
-      if (failures.length < 10) failures.push({ case: cases, group, ...result });
+      if (failures.length < MAX_FAILURE_RECORDS) {
+        failures.push({
+          case: cases, group, inputLength: bytes.length,
+          inputHead: result.input.slice(0, INPUT_HEAD_BYTES),
+          expectedHead: result.expected.slice(0, TEXT_HEAD_CHARS),
+          actualHead: head(result.actual, TEXT_HEAD_CHARS),
+          error: head(result.error, ERROR_HEAD_CHARS),
+        });
+      }
     }
   }
 
