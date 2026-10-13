@@ -38,4 +38,6 @@ The 12 mutation controls are intentionally faulty encoder implementations, not a
 
 The current harness also tests a bounded child process with synthetic nonterminating and excessive-output fixtures, rejects unpinned source files before evaluation and protects existing reports. POSIX tests send actual SIGINT and SIGTERM signals to isolated copies of the runner with idle and busy synthetic workers, then check worker termination, exit status and removal of incomplete staging files. These signal-delivery tests are skipped on Windows. A null thrown value exposed a checker error-handling gap; it now records a failing case just like an ordinary exception.
 
+Case-generation tests run all 65,976 generated cases against a local `Buffer`-based reference encoder and against faulty variants of it. They check that the case groups and a digest of every generated input match the harness behind the September 11 result, and that failure records stay compact. They do not run the external target.
+
 The preserved September 11 report describes the earlier harness and remains unchanged. New harness tests do not establish a fresh 65,976-case run against the external target. Follow the [reproduction guide](reproduce.md) to create a new dated result after reviewing that source.
